@@ -10,7 +10,7 @@ Do it at your own risk, the drawing process takes a lot of time that's why there
 exclude the white and near-white pixels from the picture.
 
 # How to configure
-The program was designed to work with one channel, but there's no reason for it to not wortk with
+The program was designed to work with one channel, but there's no reason for it to not work with
 a different one that's using the same format for drawing pixels.
 
 To use it first you'll need to configure it, all the settings are in the config.py file:
