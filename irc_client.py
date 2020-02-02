@@ -3,7 +3,6 @@ from threading import Thread, Lock
 from typing import Callable, List, Any
 import certifi
 import ssl
-#from util import get_user_from_raw, get_message_from_raw
 
 class IrcClient():
     """
@@ -23,8 +22,6 @@ class IrcClient():
             self._connection: Any = None
             self._connection_lock = Lock()
             self._send_lock = Lock()
-            self._message_handlers_lock = Lock()
-            self._message_handlers: List[Callable[[str], None]] = []
 
         return self._instance
 
@@ -181,34 +178,6 @@ class IrcClient():
             self._send_data(f'PRIVMSG {self._channel} :{message}\r\n'.encode('utf-8'))
         else: raise RuntimeError('The client is not connected')
 
-    def clear_chat(self) -> None:
-        if self._connection is not None:
-            self.send_message('/clear')
-        else: raise RuntimeError('The client is not connected')
-
-    def clear_user(self, user: str) -> None:
-        pass
-
-    def remove_message(self, user: str, message_id: str, message: str) -> None:
-        pass
-
-    def start_hosting(self, channel: str) -> None:
-        if self._connection is not None:
-            self.send_message(f'/host {channel}')
-        else: raise RuntimeError('The client is not connected')
-
-    def server_notice(self, message_id, message) -> None:
-        pass
-
-    def user_notice(self, message:  str) -> None:
-        pass
-
-    def get_roomstate(self, room='') -> None:
-        pass
-
-    def get_userstate(self, user: str) -> None:
-        pass
-
     def _process_message(self, message: str) -> None:
         """
         Bounces back the ping message, calls handler function
@@ -225,38 +194,3 @@ class IrcClient():
             lu = self._user.lower()
             if (sm == ':tmi.twitch.tv' or sm == f':{lu}.tmi.twitch.tv' or
                 message.split('!')[0] == f':{lu}'): return
-
-        with self._message_handlers_lock:
-            for message_handler in self._message_handlers:
-                message_handler(self._get_user_from_raw(message), self._get_message_from_raw(message))
-
-    def register_message_handler(self, message_handler: Callable[[str], None]) -> None:
-        """
-        Registers a callable function to be a message handler.
-        Each handler can only take one string parameter and
-        should return nothing
-        """
-        with self._message_handlers_lock:
-            if message_handler not in self._message_handlers:
-                self._message_handlers.append(message_handler)
-            else: raise RuntimeError('Tried to register the same handler twice')
-
-    def unregister_message_handler(self, message_handler: Callable[[str], None]) -> None:
-        """
-        removes a message handler if in self._message_handlers
-        """
-        with self._message_handlers_lock:
-            if message_handler in self._message_handlers:
-                self._message_handlers.remove(message_handler)
-            else: raise RuntimeError('Tried to remove non existant handler')
-
-    @classmethod
-    def handlerfunction(cls, message_handler: Callable[[str], None]):
-        """
-        ### DECORATOR ###
-        Decorated functions are added to the class' set of handlers, not instance's
-        """
-        with IrcClient()._message_handlers_lock:
-            if message_handler not in IrcClient()._message_handlers:
-                IrcClient()._message_handlers.append(message_handler)
-            else: raise RuntimeError('Tried to register the same handler twice')
