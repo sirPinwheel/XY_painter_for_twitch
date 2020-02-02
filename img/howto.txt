@@ -1,3 +1,0 @@
-Here (img folder) you can put all the images that the bot will see
-later you will be able to start the process of drawing directly
-from the chosen channel's chat.
