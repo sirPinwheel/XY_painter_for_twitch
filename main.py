@@ -56,6 +56,8 @@ def main():
                 start_y = int(input("Start drawing at Y: "))
             except ValueError: sys.exit("Coordinates have to be integer numbers")
             draw(sys.argv[1], start_x, start_y)
+            irc.disconnect()
+            sys.exit()
         else: sys.exit("File does not exist")
     else: sys.exit("No file path provided")
 
