@@ -36,6 +36,16 @@ if all RGB components of the pixel are above the treshold it gets skipped, setti
 may degrade the quality if the picture is very bright, it's best to set it around 240.
 In case ``OMMIT_WHITE`` is set to ``False`` then ``OMMIT_TRESHOLD`` doesn't do anything.
 
+``ALPHA_BLENDING`` is a function that takes into account pixels with opacity, due to the
+fact that the bot is unable to see the canvas its drawing on it is also unable to properly
+display transparency, basically it doesn't know what color the background is. If ALPHA_BLENDING
+is disabled (``False``) the bot will just draw every pixel fully opaque, but that can lead to some weird
+looking images, that why ALPHA_BLENDING should be enabled (``True``).
+
+``BLENDING_COLOR`` this is what the bot will assume the background color is, it should be set to the
+color of the canvas of the stream, most streams will likely use white. The color is a standard
+hex code, you can use any color picker to get the value you need
+
 ``DELAY`` BE CAREFUL with changing this option, it's a delay between messages, Twitch has a
 limit to how many messages one account can send, meaning that if you decrease this then the
 picture will be drawn quicker, but you risk getting your account banned.

@@ -7,6 +7,10 @@ from PIL import Image
 from irc_client import IrcClient as irc
 from config import *
 
+if ALPHA_BLENDING:
+    BLENDING_COLOR = BLENDING_COLOR.strip("#")
+    BLENDING_COLOR = tuple(int(BLENDING_COLOR[i:i+2], 16) for i in (0, 2, 4))
+
 def draw(source, start_x, start_y) -> None:
     pic = Image.open(source)
     bands = pic.getbands()
@@ -28,11 +32,19 @@ def draw(source, start_x, start_y) -> None:
                         continue
 
             elif bands == 'rgba':
-                r, g, b, a = pic.getpixel(pixel)
-                if a < 15: continue
-                elif OMMIT_WHITE:
-                    if r > OMMIT_TRESHOLD and g > OMMIT_TRESHOLD and b > OMMIT_TRESHOLD:
-                        continue
+                if ALPHA_BLENDING:
+                    src_r, src_g, src_b, src_a = pic.getpixel(pixel)
+                    dst_r, dst_g, dst_b = BLENDING_COLOR
+
+                    r = (src_r * src_a) + (dst_r * (1 - src_a))
+                    g = (src_g * src_a) + (dst_g * (1 - src_a))
+                    b = (src_b * src_a) + (dst_b * (1 - src_a))
+                else:
+                    r, g, b, a = pic.getpixel(pixel)
+                    if a < 15: continue
+                    elif OMMIT_WHITE:
+                        if r > OMMIT_TRESHOLD and g > OMMIT_TRESHOLD and b > OMMIT_TRESHOLD:
+                            continue
 
             elif bands == 'bw':
                 c = pic.getpixel(pixel)
