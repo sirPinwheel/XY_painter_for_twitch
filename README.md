@@ -13,7 +13,11 @@ exclude the white and near-white pixels from the picture.
 The program was designed to work with one channel, but there's no reason for it to not work with
 a different one that's using the same format for drawing pixels.
 
-To use it first you'll need to configure it, all the settings are in the config.py file:
+Script requires external library called ``certifi`` you can get it using pip - Python Package
+Installer by opening command line and typing in ``pip install certifi``, note that in case you
+have multiple versions of python installed you might need to use ``pip3`` instead of ``pip``.
+Now you're ready to use the bot, but for that you'll need to configure it, all the settings are
+in the config.py file:
 
 ``NAME`` that's just the nickname of the account you want to use for sending messages
 be sure to type it in all lowercase

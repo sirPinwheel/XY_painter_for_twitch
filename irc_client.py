@@ -1,8 +1,21 @@
 import socket
+import sys
 from threading import Thread, Lock
 from typing import Callable, List, Any
-import certifi
-import ssl
+
+try: import certifi
+except ImportError:
+    print("""This script requires 'certifi' python module
+It can be installed using using command 'pip install certifi'""")
+    input("Press any key...")
+    sys.exit()
+
+try: import ssl
+except ImportError:
+    print("""This script requires 'ssl' python module
+It can be installed using using command 'pip install ssl'""")
+    input("Press any key...")
+    sys.exit()
 
 class IrcClient():
     """
