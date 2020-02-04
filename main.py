@@ -33,6 +33,7 @@ def draw(source, start_x, start_y) -> None:
                     src_r, src_g, src_b, src_a = pic.getpixel(pixel)
                     dst_r, dst_g, dst_b = BLENDING_COLOR
                     src_a = src_a / 255
+                    if src_a < 0.05: continue
 
                     r = int((src_r * src_a) + (dst_r * (1 - src_a)))
                     g = int((src_g * src_a) + (dst_g * (1 - src_a)))
